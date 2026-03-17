@@ -32,7 +32,7 @@ const SERVICES: ServiceModel[] = [
     description: "Um olhar natural e elegante, perfeito para o dia a dia. Realça seus cílios com sutileza e precisão milimétrica.",
     price: 120,
     discountPrice: 99,
-    image: "/fioafio.jpg",
+    image: "./fioafio.jpg",
     duration: "1h 30min",
     style: "Natural"
   },
@@ -136,7 +136,7 @@ const SERVICES: ServiceModel[] = [
     description: "Micropigmentação com cor mais intensa e definida, ideal para quem busca praticidade e sofisticação.",
     price: 400,
     discountPrice: 350,
-    image: "/labios.jpg"
+    image: "./labios.jpg"
   },
   {
     id: 12,
@@ -166,9 +166,10 @@ export default function App() {
   const [scrolled, setScrolled] = useState(false);
   const [showNewsModal, setShowNewsModal] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-  const [filterCategory, setFilterCategory] = useState<'Cílios' | 'Sobrancelha' | 'All'>('All');
+  const [filterCategory, setFilterCategory] = useState<'Cílios' | 'Sobrancelha' | 'Lábios' | 'All'>('All');
   const [showCareModal, setShowCareModal] = useState(false);
   const [showStoryModal, setShowStoryModal] = useState(false);
+  const [bookingError, setBookingError] = useState<string>("");
 
   const { scrollYProgress } = useScroll();
   const heroOpacity = useTransform(scrollYProgress, [0, 0.2], [1, 0]);
@@ -180,15 +181,26 @@ export default function App() {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
+  const handleSelectModel = (model: ServiceModel) => {
+    setSelectedModel(model);
+    setSelectedTime("");
+    setSelectedDate("");
+    setSelectedPayment("");
+    setBookingError("");
+  };
+
   const handleSendWhatsApp = () => {
     if (!selectedModel || !selectedTime || !selectedDate || !selectedPayment) {
-      alert("Por favor, selecione todas as opções antes de enviar.");
+      setBookingError("Por favor, selecione todas as opções antes de enviar.");
       return;
     }
+    setBookingError("");
+
+    const formattedDate = selectedDate.split('-').reverse().join('/');
 
     const message = `Olá! Gostaria de agendar um procedimento:
 *Serviço:* ${selectedModel.category} - ${selectedModel.name}
-*Data:* ${selectedDate}
+*Data:* ${formattedDate}
 *Horário:* ${selectedTime}
 *Forma de Pagamento:* ${selectedPayment}
 *Valor:* R$ ${selectedModel.discountPrice.toFixed(2)}`;
@@ -212,10 +224,10 @@ export default function App() {
             <h2 className="text-4xl md:text-5xl font-serif italic relative z-10">{title}</h2>
             <div className="w-20 h-1 bg-pink-500 mt-4"></div>
           </div>
-          <p className="text-zinc-500 max-w-md text-right">Técnicas exclusivas e materiais de alta qualidade para garantir o melhor resultado para você.</p>
+          <p className="text-zinc-500 max-w-md text-left md:text-right">Técnicas exclusivas e materiais de alta qualidade para garantir o melhor resultado para você.</p>
         </motion.div>
 
-        <div className="grid grid-cols-3 gap-2 md:gap-10 px-2 md:px-0">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-10">
           {SERVICES.filter(s => s.category === category)
             .slice(0, filterCategory === 'All' ? 3 : undefined)
             .map((model, idx) => (
@@ -226,7 +238,7 @@ export default function App() {
               viewport={{ once: true }}
               transition={{ delay: idx * 0.1 }}
               className="group bg-[#0a0a0a] border border-white/5 rounded-xl md:rounded-3xl overflow-hidden hover:border-pink-500/30 transition-all duration-500"
-              onClick={() => setSelectedModel(model)}
+              onClick={() => handleSelectModel(model)}
             >
               <div className="aspect-[4/5] overflow-hidden relative">
                 <img 
@@ -312,6 +324,20 @@ export default function App() {
             >
               Sobrancelhas
             </a>
+            <a 
+              href="#lábios" 
+              onClick={(e) => {
+                e.preventDefault();
+                setFilterCategory('Lábios');
+                setTimeout(() => {
+                  document.getElementById('lábios')?.scrollIntoView({ behavior: 'smooth' });
+                }, 100);
+              }}
+              className="hover:text-pink-500 transition-colors notranslate"
+              translate="no"
+            >
+              Lábios
+            </a>
             <button 
               onClick={() => setShowNewsModal(true)}
               className="flex items-center gap-2 text-pink-500 hover:text-pink-400 transition-colors group"
@@ -373,6 +399,7 @@ export default function App() {
                 { label: 'Início', onClick: () => { setFilterCategory('All'); setIsMobileMenuOpen(false); window.scrollTo({ top: 0, behavior: 'smooth' }); } },
                 { label: 'Cílios', onClick: () => { setFilterCategory('Cílios'); setIsMobileMenuOpen(false); setTimeout(() => document.getElementById('cílios')?.scrollIntoView({ behavior: 'smooth' }), 100); } },
                 { label: 'Sobrancelhas', onClick: () => { setFilterCategory('Sobrancelha'); setIsMobileMenuOpen(false); setTimeout(() => document.getElementById('sobrancelha')?.scrollIntoView({ behavior: 'smooth' }), 100); } },
+                { label: 'Lábios', onClick: () => { setFilterCategory('Lábios'); setIsMobileMenuOpen(false); setTimeout(() => document.getElementById('lábios')?.scrollIntoView({ behavior: 'smooth' }), 100); } },
                 { label: 'Novidade', highlight: true, onClick: () => { setShowNewsModal(true); setIsMobileMenuOpen(false); } },
                 { label: 'Cuidados', onClick: () => { 
                   setShowCareModal(true);
@@ -421,7 +448,7 @@ export default function App() {
           className="absolute inset-0 z-0"
         >
           <img 
-            src="/thay.jpg" 
+            src="./thay.jpg" 
             className="w-full h-full object-cover opacity-50"
             alt="Hero Background"
             referrerPolicy="no-referrer"
@@ -486,7 +513,7 @@ export default function App() {
 
       {/* Features */}
       <section className="py-8 border-y border-white/5 bg-[#080808]">
-        <div className="max-w-7xl mx-auto px-2 grid grid-cols-4 gap-2 md:gap-12">
+        <div className="max-w-7xl mx-auto px-6 grid grid-cols-2 md:grid-cols-4 gap-6 md:gap-12">
           {[
             { icon: Sparkles, title: "Qualidade Premium", desc: "Materiais importados." },
             { icon: ShieldCheck, title: "Biossegurança", desc: "Ambiente esterilizado." },
@@ -516,6 +543,8 @@ export default function App() {
         
         {(filterCategory === 'All' || filterCategory === 'Sobrancelha') && renderServiceSection("Design de Sobrancelhas", "Sobrancelha", 1)}
 
+        {(filterCategory === 'All' || filterCategory === 'Lábios') && renderServiceSection("Micropigmentação Labial", "Lábios", 2)}
+
         {/* Testimonials */}
         <section className="py-32 bg-[#080808] relative overflow-hidden">
           <div className="max-w-7xl mx-auto px-6">
@@ -526,7 +555,7 @@ export default function App() {
               </div>
             </div>
             
-            <div className="grid grid-cols-3 gap-3 md:gap-8">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-8">
               {REVIEWS.map((review, i) => (
                 <motion.div 
                   key={i}
@@ -651,7 +680,7 @@ export default function App() {
               <div className="w-full md:w-1/2 h-64 md:h-auto order-first md:order-last p-4 md:p-6">
                 <div className="w-full h-full rounded-[1.5rem] overflow-hidden border border-white/10">
                   <img 
-                    src="/labios.jpg" 
+                    src="./labios.jpg" 
                     alt="Micropigmentação Labial"
                     className="w-full h-full object-cover"
                     referrerPolicy="no-referrer"
@@ -794,7 +823,7 @@ export default function App() {
               <div className="w-full md:w-2/5 h-64 md:h-auto p-4 md:p-6">
                 <div className="w-full h-full rounded-[1.5rem] overflow-hidden border border-white/10 relative group">
                   <img 
-                    src="/thay.jpg" 
+                    src="./thay.jpg" 
                     alt="Thaiany Santos" 
                     translate="no"
                     className="w-full h-full object-cover grayscale-0 transition-all duration-700 scale-100"
@@ -976,6 +1005,11 @@ export default function App() {
 
                 <div className="pt-10 border-t border-white/5 flex flex-col sm:flex-row items-center justify-between gap-8">
                   <div className="text-center sm:text-left">
+                    {bookingError && (
+                      <div className="text-pink-500 text-[10px] font-bold uppercase tracking-widest mb-2 animate-bounce">
+                        {bookingError}
+                      </div>
+                    )}
                     <span className="text-zinc-500 text-[10px] uppercase tracking-widest block mb-1">Investimento</span>
                     <div className="flex items-baseline gap-3">
                       <span className="text-zinc-600 line-through text-sm">R$ {selectedModel.price}</span>
