@@ -32,7 +32,7 @@ const SERVICES: ServiceModel[] = [
     description: "Um olhar natural e elegante, perfeito para o dia a dia. Realça seus cílios com sutileza e precisão milimétrica.",
     price: 120,
     discountPrice: 99,
-    image: "https://picsum.photos/seed/lash1/600/800",
+    image: "/fioafio.jpg",
     duration: "1h 30min",
     style: "Natural"
   },
@@ -136,7 +136,7 @@ const SERVICES: ServiceModel[] = [
     description: "Micropigmentação com cor mais intensa e definida, ideal para quem busca praticidade e sofisticação.",
     price: 400,
     discountPrice: 350,
-    image: "https://picsum.photos/seed/lip2/600/800"
+    image: "/labios.jpg"
   },
   {
     id: 12,
@@ -215,7 +215,7 @@ export default function App() {
           <p className="text-zinc-500 max-w-md text-right">Técnicas exclusivas e materiais de alta qualidade para garantir o melhor resultado para você.</p>
         </motion.div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-10">
+        <div className="grid grid-cols-3 gap-2 md:gap-10 px-2 md:px-0">
           {SERVICES.filter(s => s.category === category)
             .slice(0, filterCategory === 'All' ? 3 : undefined)
             .map((model, idx) => (
@@ -272,14 +272,15 @@ export default function App() {
       {/* Navigation */}
       <nav className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 px-6 py-4 ${scrolled ? 'bg-black/80 backdrop-blur-md border-b border-white/5 py-3' : 'bg-transparent'}`}>
         <div className="max-w-7xl mx-auto flex items-center justify-between">
-          <div className="text-2xl font-serif italic text-pink-500 tracking-tighter">Thay Santos Lash & Beauty</div>
+          <div className="text-2xl font-serif italic text-pink-500 tracking-tighter notranslate" translate="no">Thay Santos Lash & Beauty</div>
           
           {/* Desktop Menu */}
           <div className="hidden md:flex items-center gap-8 text-[11px] uppercase tracking-[0.2em] font-medium text-zinc-400">
             <a 
               href="#" 
               onClick={() => setFilterCategory('All')}
-              className="hover:text-pink-500 transition-colors"
+              className="hover:text-pink-500 transition-colors notranslate"
+              translate="no"
             >
               Início
             </a>
@@ -292,7 +293,8 @@ export default function App() {
                   document.getElementById('cílios')?.scrollIntoView({ behavior: 'smooth' });
                 }, 100);
               }}
-              className="hover:text-pink-500 transition-colors"
+              className="hover:text-pink-500 transition-colors notranslate"
+              translate="no"
             >
               Cílios
             </a>
@@ -305,22 +307,10 @@ export default function App() {
                   document.getElementById('sobrancelha')?.scrollIntoView({ behavior: 'smooth' });
                 }, 100);
               }}
-              className="hover:text-pink-500 transition-colors"
+              className="hover:text-pink-500 transition-colors notranslate"
+              translate="no"
             >
               Sobrancelhas
-            </a>
-            <a 
-              href="#lábios" 
-              onClick={(e) => {
-                e.preventDefault();
-                setFilterCategory('Lábios');
-                setTimeout(() => {
-                  document.getElementById('lábios')?.scrollIntoView({ behavior: 'smooth' });
-                }, 100);
-              }}
-              className="hover:text-pink-500 transition-colors"
-            >
-              Lábios
             </a>
             <button 
               onClick={() => setShowNewsModal(true)}
@@ -369,7 +359,7 @@ export default function App() {
             className="fixed inset-0 z-[60] bg-black flex flex-col p-8"
           >
             <div className="flex justify-between items-center mb-12">
-              <div className="text-2xl font-serif italic text-pink-500 tracking-tighter">Thay Santos Lash & Beauty</div>
+              <div className="text-2xl font-serif italic text-pink-500 tracking-tighter notranslate" translate="no">Thay Santos Lash & Beauty</div>
               <button 
                 onClick={() => setIsMobileMenuOpen(false)}
                 className="text-white p-2"
@@ -383,20 +373,19 @@ export default function App() {
                 { label: 'Início', onClick: () => { setFilterCategory('All'); setIsMobileMenuOpen(false); window.scrollTo({ top: 0, behavior: 'smooth' }); } },
                 { label: 'Cílios', onClick: () => { setFilterCategory('Cílios'); setIsMobileMenuOpen(false); setTimeout(() => document.getElementById('cílios')?.scrollIntoView({ behavior: 'smooth' }), 100); } },
                 { label: 'Sobrancelhas', onClick: () => { setFilterCategory('Sobrancelha'); setIsMobileMenuOpen(false); setTimeout(() => document.getElementById('sobrancelha')?.scrollIntoView({ behavior: 'smooth' }), 100); } },
-                { label: 'Lábios', onClick: () => { setFilterCategory('Lábios'); setIsMobileMenuOpen(false); setTimeout(() => document.getElementById('lábios')?.scrollIntoView({ behavior: 'smooth' }), 100); } },
                 { label: 'Novidade', highlight: true, onClick: () => { setShowNewsModal(true); setIsMobileMenuOpen(false); } },
                 { label: 'Cuidados', onClick: () => { 
                   setShowCareModal(true);
                   setIsMobileMenuOpen(false); 
                 } },
                 { label: 'Agendamento', onClick: () => { window.open('https://wa.me/5535910180139?text=Olá! Gostaria de agendar um horário.', '_blank'); setIsMobileMenuOpen(false); } }
-              ].map((item, i) => (
+              ].map((item: { label: string; onClick: () => void; highlight?: boolean }, i) => (
                 <div key={i} className="border-b border-white/10">
                   <button
                     onClick={item.onClick}
-                    className={`w-full text-left py-6 text-2xl font-medium transition-colors flex items-center justify-between ${item.highlight ? 'text-pink-500' : 'text-white hover:text-pink-500'}`}
+                    className={`w-full text-left py-6 text-xl sm:text-2xl font-medium transition-colors flex items-center justify-between ${item.highlight ? 'text-pink-500' : 'text-white hover:text-pink-500'}`}
                   >
-                    <span>{item.label}</span>
+                    <span className="notranslate" translate="no">{item.label}</span>
                     {item.highlight && (
                       <span className="bg-pink-500 text-white text-[10px] font-bold px-2 py-1 rounded-full uppercase tracking-widest animate-pulse">
                         Novo
@@ -417,7 +406,7 @@ export default function App() {
                   className="flex items-center gap-2 text-zinc-400 hover:text-pink-500 transition-colors"
                 >
                   <Instagram className="text-pink-500" size={24} />
-                  <span className="text-sm font-medium">@thay.santos_beauty</span>
+                  <span className="text-sm font-medium notranslate" translate="no">@thay.santos_beauty</span>
                 </a>
               </div>
             </div>
@@ -428,16 +417,16 @@ export default function App() {
       {/* Hero Section */}
       <section className="relative h-screen flex items-center justify-center overflow-hidden px-6">
         <motion.div 
-          style={{ opacity: heroOpacity, scale: heroScale }}
+          style={{ opacity: heroOpacity }}
           className="absolute inset-0 z-0"
         >
           <img 
-            src="https://images.unsplash.com/photo-1441974231531-c6227db76b6e?auto=format&fit=crop&q=80&w=1920" 
-            className="w-full h-full object-cover opacity-30"
+            src="/thay.jpg" 
+            className="w-full h-full object-cover opacity-50"
             alt="Hero Background"
             referrerPolicy="no-referrer"
           />
-          <div className="absolute inset-0 bg-gradient-to-b from-transparent via-[#050505]/50 to-[#050505]"></div>
+          <div className="absolute inset-0 bg-gradient-to-b from-transparent via-[#050505]/70 to-[#050505]"></div>
         </motion.div>
 
         <div className="relative z-10 text-center max-w-4xl">
@@ -453,20 +442,20 @@ export default function App() {
               A Arte de <br /> <span className="text-pink-500 text-glow">Encantar</span>
             </h1>
             <p className="text-zinc-400 text-lg md:text-xl max-w-2xl mx-auto mb-12 font-light leading-relaxed">
-              Especialistas em realçar sua beleza natural com técnicas avançadas de extensão de cílios, design de sobrancelhas e micropigmentação.
+              Especialistas em realçar sua beleza natural com técnicas avançadas de extensão de cílios e design de sobrancelhas.
             </p>
-            <div className="flex flex-col sm:flex-row items-center justify-center gap-6">
+            <div className="flex flex-row items-center justify-center gap-3 sm:gap-6 px-4">
               <button 
                 onClick={() => document.getElementById('cílios')?.scrollIntoView({ behavior: 'smooth' })}
-                className="bg-pink-600 hover:bg-pink-500 text-white px-10 py-5 rounded-full font-bold text-sm uppercase tracking-widest transition-all shadow-2xl shadow-pink-600/20 group"
+                className="flex-1 sm:w-auto bg-pink-600 hover:bg-pink-500 text-white px-4 sm:px-10 py-4 sm:py-5 rounded-full font-bold text-[10px] sm:text-sm uppercase tracking-wide sm:tracking-widest transition-all shadow-2xl shadow-pink-600/20 group whitespace-nowrap"
               >
-                Ver Procedimentos <ArrowRight className="inline-block ml-2 group-hover:translate-x-1 transition-transform" size={18} />
+                Procedimentos <ArrowRight className="inline-block ml-1 sm:ml-2 group-hover:translate-x-1 transition-transform" size={14} />
               </button>
               <button 
                 onClick={() => setShowStoryModal(true)}
-                className="text-white border border-white/10 hover:bg-white/5 px-10 py-5 rounded-full font-bold text-sm uppercase tracking-widest transition-all"
+                className="flex-1 sm:w-auto text-white border border-white/10 hover:bg-white/5 px-4 sm:px-10 py-4 sm:py-5 rounded-full font-bold text-[10px] sm:text-sm uppercase tracking-wide sm:tracking-widest transition-all whitespace-nowrap"
               >
-                Nossa História
+                História
               </button>
             </div>
           </motion.div>
@@ -496,13 +485,13 @@ export default function App() {
       </section>
 
       {/* Features */}
-      <section className="py-12 border-y border-white/5 bg-[#080808]">
-        <div className="max-w-7xl mx-auto px-6 grid grid-cols-1 md:grid-cols-4 gap-12">
+      <section className="py-8 border-y border-white/5 bg-[#080808]">
+        <div className="max-w-7xl mx-auto px-2 grid grid-cols-4 gap-2 md:gap-12">
           {[
-            { icon: Sparkles, title: "Qualidade Premium", desc: "Materiais importados e hipoalergênicos." },
-            { icon: ShieldCheck, title: "Biossegurança", desc: "Ambiente esterilizado e seguro para você." },
-            { icon: Award, title: "Especialistas", desc: "Profissionais certificadas internacionalmente." },
-            { icon: Heart, title: "Atendimento VIP", desc: "Experiência personalizada e exclusiva." }
+            { icon: Sparkles, title: "Qualidade Premium", desc: "Materiais importados." },
+            { icon: ShieldCheck, title: "Biossegurança", desc: "Ambiente esterilizado." },
+            { icon: Award, title: "Especialistas", desc: "Certificadas." },
+            { icon: Heart, title: "Atendimento VIP", desc: "Experiência exclusiva." }
           ].map((item, i) => (
             <motion.div 
               key={i}
@@ -512,11 +501,11 @@ export default function App() {
               transition={{ delay: i * 0.1 }}
               className="flex flex-col items-center text-center group"
             >
-              <div className="w-12 h-12 rounded-xl bg-white/5 flex items-center justify-center mb-3 group-hover:bg-pink-500/10 group-hover:scale-110 transition-all duration-500">
-                <item.icon className="text-pink-500" size={20} />
+              <div className="w-10 h-10 rounded-xl bg-white/5 flex items-center justify-center mb-2 group-hover:bg-pink-500/10 group-hover:scale-110 transition-all duration-500">
+                <item.icon className="text-pink-500" size={18} />
               </div>
-              <h4 className="text-base font-serif italic mb-1">{item.title}</h4>
-              <p className="text-zinc-500 text-[11px] leading-relaxed max-w-[200px]">{item.desc}</p>
+              <h4 className="text-[13px] md:text-base font-serif italic mb-1 leading-tight">{item.title}</h4>
+              <p className="text-zinc-500 text-[9px] md:text-[11px] leading-tight max-w-[120px]">{item.desc}</p>
             </motion.div>
           ))}
         </div>
@@ -526,8 +515,6 @@ export default function App() {
         {(filterCategory === 'All' || filterCategory === 'Cílios') && renderServiceSection("Extensão de Cílios", "Cílios", 0)}
         
         {(filterCategory === 'All' || filterCategory === 'Sobrancelha') && renderServiceSection("Design de Sobrancelhas", "Sobrancelha", 1)}
-
-        {(filterCategory === 'All' || filterCategory === 'Lábios') && renderServiceSection("Micropigmentação Labial", "Lábios", 2)}
 
         {/* Testimonials */}
         <section className="py-32 bg-[#080808] relative overflow-hidden">
@@ -539,22 +526,22 @@ export default function App() {
               </div>
             </div>
             
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+            <div className="grid grid-cols-3 gap-3 md:gap-8">
               {REVIEWS.map((review, i) => (
                 <motion.div 
                   key={i}
                   whileHover={{ y: -5 }}
-                  className="p-10 rounded-3xl bg-white/5 border border-white/5 relative"
+                  className="p-4 md:p-10 rounded-2xl md:rounded-3xl bg-white/5 border border-white/5 relative"
                 >
-                  <span className="text-6xl font-serif text-pink-500/20 absolute top-6 left-6">"</span>
-                  <p className="text-zinc-300 italic mb-8 relative z-10 leading-relaxed">{review.text}</p>
-                  <div className="flex items-center gap-4">
-                    <div className="w-10 h-10 rounded-full bg-pink-500/20 flex items-center justify-center text-pink-500 font-bold">
+                  <span className="text-3xl md:text-6xl font-serif text-pink-500/20 absolute top-3 left-3 md:top-6 md:left-6">"</span>
+                  <p className="text-zinc-300 italic mb-4 md:mb-8 relative z-10 leading-relaxed text-[10px] md:text-base line-clamp-4 md:line-clamp-none">{review.text}</p>
+                  <div className="flex items-center gap-2 md:gap-4">
+                    <div className="w-6 h-6 md:w-10 md:h-10 rounded-full bg-pink-500/20 flex items-center justify-center text-pink-500 font-bold text-[10px] md:text-base">
                       {review.name[0]}
                     </div>
                     <div>
-                      <h5 className="font-medium text-sm">{review.name}</h5>
-                      <span className="text-zinc-500 text-[10px] uppercase tracking-widest">Cliente Verificada</span>
+                      <h5 className="font-medium text-[10px] md:text-sm leading-tight">{review.name}</h5>
+                      <span className="text-zinc-500 text-[7px] md:text-[10px] uppercase tracking-widest block">Verificada</span>
                     </div>
                   </div>
                 </motion.div>
@@ -583,7 +570,15 @@ export default function App() {
                 </div>
                 <div>
                   <h4 className="font-medium mb-1">Contato</h4>
-                  <p className="text-zinc-500 text-sm leading-relaxed">(35) 91018-0139<br />contato@thaysantos.com</p>
+                  <p className="text-zinc-500 text-sm leading-relaxed">
+                    <a href="https://wa.me/5535910180139" target="_blank" rel="noopener noreferrer" className="hover:text-pink-500 transition-colors">
+                      (35) 91018-0139
+                    </a>
+                    <br />
+                    <a href="mailto:thaysantoslashbeauty@gmail.com" className="hover:text-pink-500 transition-colors">
+                      thaysantoslashbeauty@gmail.com
+                    </a>
+                  </p>
                 </div>
               </div>
             </div>
@@ -614,7 +609,7 @@ export default function App() {
                 className="inline-flex items-center gap-3 bg-white/5 hover:bg-pink-500 hover:text-white px-8 py-4 rounded-2xl transition-all group"
               >
                 <Instagram size={20} className="text-pink-500 group-hover:text-white" />
-                <span className="font-bold text-sm">@thay.santos_beauty</span>
+                <span className="font-bold text-sm notranslate" translate="no">@thay.santos_beauty</span>
               </a>
             </div>
           </div>
@@ -623,8 +618,8 @@ export default function App() {
 
       {/* Footer */}
       <footer className="py-12 bg-black text-center border-t border-white/5">
-        <div className="text-2xl font-serif italic text-pink-500 mb-6">Thay Santos Lash & Beauty</div>
-        <p className="text-zinc-600 text-[10px] uppercase tracking-[0.3em]">&copy; 2026 Thay Santos. Todos os direitos reservados.</p>
+        <div className="text-2xl font-serif italic text-pink-500 mb-6 notranslate" translate="no">Thay Santos Lash & Beauty</div>
+        <p className="text-zinc-600 text-[10px] uppercase tracking-[0.3em]">&copy; 2026 <span translate="no" className="notranslate">Thay Santos</span>. Todos os direitos reservados.</p>
       </footer>
 
       {/* Modal / Card */}
@@ -656,7 +651,7 @@ export default function App() {
               <div className="w-full md:w-1/2 h-64 md:h-auto order-first md:order-last p-4 md:p-6">
                 <div className="w-full h-full rounded-[1.5rem] overflow-hidden border border-white/10">
                   <img 
-                    src="https://picsum.photos/seed/lip-news/800/1000" 
+                    src="/labios.jpg" 
                     alt="Micropigmentação Labial"
                     className="w-full h-full object-cover"
                     referrerPolicy="no-referrer"
@@ -799,14 +794,15 @@ export default function App() {
               <div className="w-full md:w-2/5 h-64 md:h-auto p-4 md:p-6">
                 <div className="w-full h-full rounded-[1.5rem] overflow-hidden border border-white/10 relative group">
                   <img 
-                    src="https://images.unsplash.com/photo-1595475243692-39282099037a?q=80&w=2000&auto=format&fit=crop" 
+                    src="/thay.jpg" 
                     alt="Thaiany Santos" 
-                    className="w-full h-full object-cover grayscale hover:grayscale-0 transition-all duration-700 scale-110 group-hover:scale-100"
+                    translate="no"
+                    className="w-full h-full object-cover grayscale-0 transition-all duration-700 scale-100"
                     referrerPolicy="no-referrer"
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent"></div>
                   <div className="absolute bottom-8 left-8">
-                    <div className="text-2xl font-serif italic text-white">Thaiany Santos</div>
+                    <div className="text-2xl font-serif italic text-white notranslate" translate="no">Thaiany Santos</div>
                     <div className="text-pink-500 text-[10px] uppercase tracking-widest font-bold">Lash Designer & Specialist</div>
                   </div>
                 </div>
@@ -821,7 +817,7 @@ export default function App() {
 
                 <div className="space-y-6 text-zinc-400 text-sm md:text-base leading-relaxed overflow-y-auto pr-4 custom-scrollbar">
                   <p>
-                    Meu nome é <span className="text-white font-medium">Thaiany Santos</span> e sou apaixonada pelo mundo da beleza. Comecei a trabalhar com extensão de cílios com o objetivo de ajudar mulheres a se sentirem mais confiantes, bonitas e valorizadas.
+                    Meu nome é <span className="text-white font-medium notranslate" translate="no">Thaiany Santos</span> e sou apaixonada pelo mundo da beleza. Comecei a trabalhar com extensão de cílios com o objetivo de ajudar mulheres a se sentirem mais confiantes, bonitas e valorizadas.
                   </p>
                   <p>
                     Com o tempo fui me aperfeiçoando e ampliando meus serviços, trabalhando também com design de sobrancelhas e, em alguns momentos, maquiagem. Cada atendimento é feito com muito cuidado, dedicação e carinho, sempre pensando em realçar a beleza natural de cada cliente.
